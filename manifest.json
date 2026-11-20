@@ -1,0 +1,18 @@
+{
+  "name": "UBVC Marketplace — ตลาดนัดออนไลน์ วอศ.อบ.",
+  "short_name": "UBVC Market",
+  "description": "ตลาดนัดออนไลน์นักศึกษาและบุคลากร วิทยาลัยอาชีวศึกษาอุบลราชธานี",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1d4ed8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

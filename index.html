@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>UBVC Marketplace — ตลาดนัดออนไลน์ วิทยาลัยอาชีวศึกษาอุบลราชธานี</title>
+  <meta name="theme-color" content="#1d4ed8" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="UBVC Market" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Prompt', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af', 900: '#0f295c' }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+* {
+      font-family: 'Prompt', sans-serif;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .animate-pop {
+      animation: fadeSlideIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes heartPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .animate-heart {
+      animation: heartPop 0.32s ease-out;
+    }
+    .card-lift {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .card-lift:hover {
+      transform: translateY(-4px);
+    }
+
+    body.dark-mode {
+      background-color: #0b1120;
+      color: #f1f5f9;
+    }
+    body.dark-mode header,
+    body.dark-mode footer,
+    body.dark-mode nav.md\:hidden,
+    body.dark-mode .bg-white {
+      background-color: #111827 !important;
+      color: #f1f5f9 !important;
+      border-color: #1f2937 !important;
+    }
+    body.dark-mode .bg-slate-50,
+    body.dark-mode .bg-slate-50\/60,
+    body.dark-mode .bg-slate-100 {
+      background-color: #1e293b !important;
+      color: #e2e8f0 !important;
+    }
+    body.dark-mode .text-slate-900,
+    body.dark-mode .text-slate-800,
+    body.dark-mode .text-slate-700 {
+      color: #f1f5f9 !important;
+    }
+    body.dark-mode .text-slate-600,
+    body.dark-mode .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+    body.dark-mode .border-slate-200,
+    body.dark-mode .border-slate-200\/90,
+    body.dark-mode .border-slate-200\/80,
+    body.dark-mode .border-slate-100 {
+      border-color: #1f2937 !important;
+    }
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode textarea {
+      background-color: #0f172a !important;
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 pb-16 md:pb-0">
+
+  <div id="scrollProgressBar" class="fixed top-0 left-0 h-[2.5px] bg-blue-600 z-[70] transition-all duration-75" style="width: 0%"></div>
+  <div id="appRoot" class="min-h-screen flex flex-col"></div>
+
+  <div id="spotlightOverlay" class="hidden fixed inset-0 z-50 bg-slate-900/45 backdrop-blur-sm flex items-start justify-center pt-16 sm:pt-24 p-4">
+    <div id="spotlightBox" class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-xl overflow-hidden animate-pop"></div>
+  </div>
+
+  <div id="modalOverlay" class="hidden fixed inset-0 z-50 bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div id="modalBox" class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-2xl overflow-hidden animate-pop my-auto"></div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-20 md:bottom-5 right-5 z-[60] flex flex-col gap-2 pointer-events-none"></div>
+
+  <button id="scrollTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="เลื่อนขึ้นด้านบน" class="hidden fixed bottom-20 md:bottom-6 left-5 z-40 w-10 h-10 rounded-full bg-slate-900/90 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition animate-pop">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+  </button>
+
+  <!-- BACKEND & FRONTEND (2 ไฟล์หลักชัดเจน ไม่มีโฟลเดอร์ย่อย) -->
+  <script src="./backend.js"></script>
+  <script src="./frontend.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js?v=11').catch(() => {});
+    }
+  </script>
+</body>
+</html>
